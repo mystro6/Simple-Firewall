@@ -1,0 +1,62 @@
+Name
+struct sk_buff — socket buffer
+
+Synopsis
+struct sk_buff {
+  union {unnamed_union};
+  __u16 inner_transport_header;
+  __u16 inner_network_header;
+  __u16 inner_mac_header;
+  __be16 protocol;
+  __u16 transport_header;
+  __u16 network_header;
+  __u16 mac_header;
+  sk_buff_data_t tail;
+  sk_buff_data_t end;
+  unsigned char * head;
+  unsigned char * data;
+  unsigned int truesize;
+  atomic_t users;
+};  
+Members
+union {unnamed_union}
+anonymous
+
+__u16 inner_transport_header
+Inner transport layer header (encapsulation)
+
+__u16 inner_network_header
+Network layer header (encapsulation)
+
+__u16 inner_mac_header
+Link layer header (encapsulation)
+
+__be16 protocol
+Packet protocol from driver
+
+__u16 transport_header
+Transport layer header
+
+__u16 network_header
+Network layer header
+
+__u16 mac_header
+Link layer header
+
+sk_buff_data_t tail
+Tail pointer
+
+sk_buff_data_t end
+End pointer
+
+unsigned char * head
+Head of buffer
+
+unsigned char * data
+Data head pointer
+
+unsigned int truesize
+Buffer size
+
+atomic_t users
+User count - see {datagram,tcp}.c
